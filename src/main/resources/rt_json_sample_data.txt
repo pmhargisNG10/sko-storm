@@ -1,0 +1,4 @@
+{"TagId":"1a6c8fe9c20e4e02bc0aaad11671a27b","Time":"2014-12-06T00:00:00.0000000Z","DoubleValue":2.1338397689299997,"Quality":0.0,"Comment":null}
+{"TagId":"e1cf7a9705184816813178483dd56a81","Time":"2014-12-06T00:00:00.0000000Z","DoubleValue":0.18117314674999999,"Quality":0.0,"Comment":null}
+{"TagId":"97482f3c718c49de8db174fca758493c","Time":"2014-12-06T00:00:00.0000000Z","DoubleValue":0.93903903304,"Quality":0.0,"Comment":null}
+{"TagId":"eb7df7658ea2459bb085c1cf518f665d","Time":"2014-12-06T00:00:00.0000000Z","DoubleValue":2.311452553977,"Quality":0.0,"Comment":null}
