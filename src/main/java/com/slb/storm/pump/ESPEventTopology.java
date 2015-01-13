@@ -40,14 +40,14 @@ public class ESPEventTopology extends BaseEventTopology {
     public void configureKafkaSpout(TopologyBuilder builder)
     {
         KafkaSpout kafkaSpout = new KafkaSpout(constructKafkaSpoutConf());
-        builder.setSpout(KAFKA_SPOUT_ID, kafkaSpout, 25);
+        builder.setSpout(KAFKA_SPOUT_ID, kafkaSpout, 3);
     }
 
     public void configureLookupBolt(TopologyBuilder builder)
     {
         DtsEventBolt dtsEventBolt = new DtsEventBolt();
 //        builder.setBolt(LOOKUP_BOLT_ID, tagLookupBolt, 2).shuffleGrouping(KAFKA_SPOUT_ID);
-        builder.setBolt(LOOKUP_BOLT_ID, dtsEventBolt, 30).fieldsGrouping(KAFKA_SPOUT_ID,
+        builder.setBolt(LOOKUP_BOLT_ID, dtsEventBolt, 3).fieldsGrouping(KAFKA_SPOUT_ID,
                 new Fields(ESPScheme.TRACE_KEY));
     }
 
