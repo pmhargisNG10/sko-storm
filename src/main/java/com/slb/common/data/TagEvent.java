@@ -64,7 +64,7 @@ public class TagEvent implements Serializable {
         String jsonString = "{\"TagId\":\"Accel_Pump_head_90\",\"Time\":\"2014-10-16T18:25:12.0058824Z\",\"DoubleValue\":-3.4566017791799997,\"Quality\":0.0,\"Comment\":null}";
         //parse json
         Gson gson = new
-                GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'").create();
+                GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").create();
 
         TagEvent tagEvent = gson.fromJson(jsonString, TagEvent.class);
         System.out.println(tagEvent);

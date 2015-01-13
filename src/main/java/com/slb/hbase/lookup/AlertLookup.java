@@ -57,7 +57,7 @@ public class AlertLookup {
             Result result = iterator.next();
             String type = Bytes.toString(result.getValue(TagAlert.CF_TAG_ALERT, Alert.ALERT_TYPE));
             String message = Bytes.toString(result.getValue(TagAlert.CF_TAG_ALERT, Alert.MESSAGE));
-            String tagId = Bytes.toString(result.getValue(TagAlert.CF_TAG_ALERT, Bytes.toBytes(ESPScheme.TAG_ID)));
+            String tagId = Bytes.toString(result.getValue(TagAlert.CF_TAG_ALERT, Bytes.toBytes(ESPScheme.TRACE_KEY)));
 //            int pumpIdNoStr = Bytes.toInt(result.getValue(TagAlert.CF_TAG_ALERT, Bytes.toBytes(ESPScheme.PUMP_ID_NO)));
             alert = new Alert();
             alert.setAlertType(type);

@@ -45,26 +45,12 @@ public class ESPEventTopology extends BaseEventTopology {
 
     public void configureLookupBolt(TopologyBuilder builder)
     {
-        TagLookupBolt tagLookupBolt = new TagLookupBolt();
+        DtsEventBolt dtsEventBolt = new DtsEventBolt();
 //        builder.setBolt(LOOKUP_BOLT_ID, tagLookupBolt, 2).shuffleGrouping(KAFKA_SPOUT_ID);
-        builder.setBolt(LOOKUP_BOLT_ID, tagLookupBolt, 30).fieldsGrouping(KAFKA_SPOUT_ID,
-                new Fields(ESPScheme.TAG_ID));
+        builder.setBolt(LOOKUP_BOLT_ID, dtsEventBolt, 30).fieldsGrouping(KAFKA_SPOUT_ID,
+                new Fields(ESPScheme.TRACE_KEY));
     }
 
-    public void configureMonitorBolt(TopologyBuilder builder)
-    {
-        MonitorBolt monitorBolt = new MonitorBolt();
-//        builder.setBolt(MONITOR_BOLT_ID, monitorBolt, 2).shuffleGrouping(KAFKA_SPOUT_ID);
-        builder.setBolt(MONITOR_BOLT_ID, monitorBolt, 40).fieldsGrouping(LOOKUP_BOLT_ID,
-                new Fields(ESPScheme.PUMP_ID));
-    }
-
-    public void configureHBaseBolt(TopologyBuilder builder)
-    {
-        TagHBaseBolt hbaseBolt = new TagHBaseBolt();
-        builder.setBolt(HBASE_BOLT_ID, hbaseBolt, 42).fieldsGrouping(LOOKUP_BOLT_ID,
-                new Fields(ESPScheme.PUMP_ID));
-    }
 
     private void buildAndSubmit() throws Exception
     {
@@ -80,8 +66,6 @@ public class ESPEventTopology extends BaseEventTopology {
         TopologyBuilder builder = new TopologyBuilder();
         configureKafkaSpout(builder);
         configureLookupBolt(builder);
-        configureHBaseBolt(builder);
-        configureMonitorBolt(builder);
 
 //        StormSubmitter.submitTopology("tag-event-processor",
 //                conf, builder.createTopology());

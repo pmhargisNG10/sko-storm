@@ -24,8 +24,8 @@ public class TagAlert {
         String currentTime = TimeStamp.getTimeStamp();
         byte[] rowKey = AlertRowKey.constructRowKey(pumpIdNo, tagId, alertType, currentTime);
         Put put = new Put(rowKey);
-        put.add(CF_TAG_ALERT, Bytes.toBytes(ESPScheme.PUMP_ID_NO), Bytes.toBytes(pumpIdNo));
-        put.add(CF_TAG_ALERT, Bytes.toBytes(ESPScheme.TAG_ID), Bytes.toBytes(tagId));
+        put.add(CF_TAG_ALERT, Bytes.toBytes(ESPScheme.TRACE_KEY), Bytes.toBytes(pumpIdNo));
+        put.add(CF_TAG_ALERT, Bytes.toBytes(ESPScheme.DEPTH_KEY), Bytes.toBytes(tagId));
         put.add(CF_TAG_ALERT, Bytes.toBytes("alertType"), Bytes.toBytes(alertType.getType()));
         put.add(CF_TAG_ALERT, Bytes.toBytes("message"), Bytes.toBytes(message));
         alertTable.put(put);

@@ -5,7 +5,7 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.slb.common.data.TagEvent;
+import com.slb.common.data.DtsPacket;
 import org.apache.log4j.Logger;
 
 import java.io.UnsupportedEncodingException;
@@ -17,48 +17,25 @@ import java.util.List;
  */
 public class ESPScheme implements Scheme {
 
-    public static final String PUMP_ID = "pumpId";
-    public static final String PUMP_ID_NO = "pumpIdNo";
-    public static final String TAG_ID = "tagId";
-    public static final String TAG_ID_NO = "tagIdNo";
-    public static final String EVENT_TIME = "eventTime";
-    public static final String VALUE = "value";
-    public static final String QUALITY = "quality";
-    public static final String COMMENT = "comment";
+    public static final String TRACE_KEY = "Trace";
+    public static final String DEPTH_KEY = "Depth";
+    public static final String TEMP_KEY = "Temp";
+    public static final String DTS_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
-    private static final Gson GSON = new
-            GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'").create();
+//    public static final String PUMP_ID = "pumpId";
+//    public static final String PUMP_ID_NO = "pumpIdNo";
+//    public static final String TAG_ID = "tagId";
+//    public static final String TAG_ID_NO = "tagIdNo";
+//    public static final String EVENT_TIME = "eventTime";
+//    public static final String VALUE = "value";
+//    public static final String QUALITY = "quality";
+//    public static final String COMMENT = "comment";
+
+    private static final Gson GSON = new GsonBuilder().setDateFormat(DTS_DATE_FORMAT).create();
 
     //private static final long serialVersionUID = -2990121166902741545L;
 
     private static final Logger LOG = Logger.getLogger(ESPScheme.class);
-
-    /**
-     * tag_id | timestamp | m1_Qualifier | m1_Value
-     *
-     * @param bytes
-     * @return
-     */
-    public List<Object> deserialize1(byte[] bytes) {
-        try {
-            String tagEvent = new String(bytes, "UTF-8");
-            //parse json string in
-            String[] pieces = tagEvent.split("\\|");
-
-            String tagId = pieces[0];
-//            Timestamp eventTime = Timestamp.valueOf(pieces[1]);
-//            Timestamp eventTime = new Timestamp(Long.parseLong(pieces[1]));
-            String eventTime = pieces[1];
-            String metricType = pieces[2];
-            String metricValue = pieces[3];
-            return new Values(cleanup(metricType), cleanup(tagId),
-                    cleanup(eventTime), cleanup(metricValue));
-
-        } catch (UnsupportedEncodingException e) {
-            LOG.error(e);
-            throw new RuntimeException(e);
-        }
-    }
 
     /**
      * {"TagId":"Accel_Pump_head_90","Time":"2014-10-16T18:25:12.0058824Z","DoubleValue":-3.4566017791799997,"Quality":0.0,"Comment":null}
@@ -69,24 +46,21 @@ public class ESPScheme implements Scheme {
     @Override
     public List<Object> deserialize(byte[] bytes) {
         try {
-            String tagEventStr = new String(bytes, "UTF-8");
+            String dtsJson = new String(bytes, "UTF-8");
             //parse json string in
-            TagEvent tagEvent = GSON.fromJson(tagEventStr, TagEvent.class);
+            DtsPacket dts = GSON.fromJson(dtsJson, DtsPacket.class);
 
-            if(tagEvent != null) {
-                String tagId = tagEvent.getTagId();
-                Date date = tagEvent.getTime();
+            if(dts != null) {
+                Date trace = dts.getTrace();
                 long time = 0L;
-                if(date != null) {
-                    time = date.getTime();
+                if(trace != null) {
+                    time = trace.getTime();
                 }
-                double value = tagEvent.getDoubleValue();
-                double quality = tagEvent.getQuality();
-                String comment = tagEvent.getComment();
-                return new Values(cleanup(tagId), time,
-                        value, quality, cleanup(comment));
+                double depth = dts.getDepth();
+                double temp = dts.getTemp();
+                return new Values(time, depth, temp);
             } else {
-                LOG.error("JSON string from Kafka topic is empty. " + tagEventStr);
+                LOG.error("JSON string from Kafka topic is empty. " + dtsJson);
                 return null;
             }
 
@@ -99,11 +73,9 @@ public class ESPScheme implements Scheme {
 
     @Override
     public Fields getOutputFields() {
-        return new Fields(TAG_ID,
-                EVENT_TIME,
-                VALUE,
-                QUALITY,
-                COMMENT
+        return new Fields(TRACE_KEY,
+                DEPTH_KEY,
+                TEMP_KEY
         );
 
     }
