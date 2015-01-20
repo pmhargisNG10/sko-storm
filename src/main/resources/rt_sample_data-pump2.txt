@@ -1,5 +1,0 @@
-{"TagId":"a24f0a956be24cccb2046119e2ea4813","Time":"2014-10-16T18:25:12.0058824Z","DoubleValue":-3.4566017791799997,"Quality":0.0,"Comment":"HARE KRISHNA"}
-{"TagId":"cdf4858847ff4b219b101f5bd1af9442","Time":"2014-10-16T18:25:12.0058824Z","DoubleValue":-0.37831189650999997,"Quality":0.0,"Comment":"HARE KRISHNA"}
-{"TagId":"9a38b802ec0c4f2091e2dfe14fcd7889","Time":"2014-10-16T18:25:12.0058824Z","DoubleValue":-0.5820871076,"Quality":0.0,"Comment":null}
-{"TagId":"536ce6e4b51e47bfa38fa1e02569362e","Time":"2014-10-16T18:25:12.0058824Z","DoubleValue":2.334333327612,"Quality":0.0,"Comment":null}
-{"TagId":"e9ed860a799e40d1948fdf697d841495","Time":"2014-10-16T18:25:12.0058824Z","DoubleValue":2.052177840804,"Quality":0.0,"Comment":null}

@@ -11,7 +11,6 @@ import java.util.Date;
  * User: phargis
  * Date: 1/11/15
  * Time: 8:12 PM
- * To change this template use File | Settings | File Templates.
  */
 
 public class DtsPacket implements Serializable {
@@ -58,12 +57,11 @@ public class DtsPacket implements Serializable {
     }
 
     public static void main(String... args) {
-        //String jsonString = "{\"TagId\":\"Accel_Pump_head_90\",\"Time\":\"2014-10-16T18:25:12.0058824Z\",\"DoubleValue\":-3.4566017791799997,\"Quality\":0.0,\"Comment\":null}";
-        String json2 = "{\"Trace\":\"2013-05-05T14:17:22.000Z\",\"Depth\":1638.77958,\"Temp\":158.4924789313311}";
+        String json = "{\"Trace\":\"2013-05-05T14:17:22.000Z\",\"Depth\":1638.77958,\"Temp\":158.4924789313311}";
         //parse json
         Gson gson = new GsonBuilder().setDateFormat(DTS_DATE_FORMAT).create();
 
-        DtsPacket dts = gson.fromJson(json2, DtsPacket.class);
+        DtsPacket dts = gson.fromJson(json, DtsPacket.class);
         System.out.println(dts);
     }
 }

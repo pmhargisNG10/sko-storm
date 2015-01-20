@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by dpramodv on 11/14/14.
+ * Created by Paul Hargis.
  */
 public class ESPScheme implements Scheme {
 
@@ -64,7 +64,6 @@ public class ESPScheme implements Scheme {
                 return null;
             }
 
-
         } catch (UnsupportedEncodingException e) {
             LOG.error(e);
             throw new RuntimeException(e);
@@ -73,11 +72,7 @@ public class ESPScheme implements Scheme {
 
     @Override
     public Fields getOutputFields() {
-        return new Fields(TRACE_KEY,
-                DEPTH_KEY,
-                TEMP_KEY
-        );
-
+        return new Fields(TRACE_KEY, DEPTH_KEY, TEMP_KEY);
     }
 
     private String cleanup(String str) {

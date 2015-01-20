@@ -1,22 +1,17 @@
 package com.slb.common.util;
 
+import com.slb.common.data.Pump;
+import com.slb.common.data.TagMetaData;
+import com.slb.hbase.persist.MetaData;
+
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import com.slb.common.data.Pump;
-import com.slb.common.data.TagMetaData;
-import com.slb.hbase.persist.MetaData;
-import com.slb.hbase.rowkeys.MetaRowKey;
-import org.apache.hadoop.hbase.client.HConnection;
-import org.apache.hadoop.hbase.client.HTableInterface;
-import org.apache.hadoop.hbase.util.Bytes;
 
 
 public class MetaDataLoad {

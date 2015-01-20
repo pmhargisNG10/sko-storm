@@ -2,15 +2,12 @@ package com.slb.common.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.slb.common.data.Pump;
 import com.slb.common.data.TagEvent;
 import com.slb.hbase.lookup.MetaLookup;
 import com.slb.hbase.persist.MetaData;
 import com.slb.hbase.persist.TagPersist;
-import com.slb.hbase.rowkeys.TagRowKey;
 import com.slb.kafka.producer.JSONEventProducer;
 import kafka.javaapi.producer.Producer;
-import org.apache.commons.math3.random.RandomGenerator;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
