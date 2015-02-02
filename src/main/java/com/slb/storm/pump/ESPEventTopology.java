@@ -92,7 +92,7 @@ public class ESPEventTopology extends BaseEventTopology {
 
     public static void main(String[] str) throws Exception
     {
-        String stormConfigFile = "sko_storm_demo.properties";
+        String stormConfigFile = "storm_demo.properties";
         ESPEventTopology truckTopology = new ESPEventTopology(stormConfigFile);
         truckTopology.buildAndSubmit();
     }

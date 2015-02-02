@@ -28,7 +28,7 @@ public class AlertMail {
     private Properties emailProps = null;
 
     public AlertMail() {
-        String emailConfigFile = "sko_email.properties";
+        String emailConfigFile = "email.properties";
         this.emailProps = null;
         try {
             emailProps = PropertiesLoader.loadPropertiesFromFile(emailConfigFile);
