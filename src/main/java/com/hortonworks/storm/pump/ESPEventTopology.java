@@ -57,10 +57,10 @@ public class ESPEventTopology extends BaseEventTopology {
         builder.setSpout(KAFKA_SPOUT_ID, kafkaSpout, 3);
     }
 
-    public void configureEventBolt(TopologyBuilder builder)
+    public void configureMonitorBolt(TopologyBuilder builder)
     {
-        DtsEventBolt dtsEventBolt = new DtsEventBolt();
-        builder.setBolt(DTS_BOLT_ID, dtsEventBolt, 3).fieldsGrouping(KAFKA_SPOUT_ID,
+        DtsMonitorBolt dtsMonitorBolt = new DtsMonitorBolt();
+        builder.setBolt(DTS_BOLT_ID, dtsMonitorBolt, 3).fieldsGrouping(KAFKA_SPOUT_ID,
                 new Fields(ESPScheme.TRACE_KEY));
     }
 
@@ -72,7 +72,7 @@ public class ESPEventTopology extends BaseEventTopology {
                 new Fields(ESPScheme.TRACE_KEY));
     }
 
-    public void configureHDFSBolt(TopologyBuilder builder)
+    public void configureHdfsBolt(TopologyBuilder builder)
     {
 //        String rootPath = topologyConfig.getProperty("hdfs.path");
 //        String prefix = topologyConfig.getProperty("hdfs.file.prefix");
@@ -128,9 +128,9 @@ public class ESPEventTopology extends BaseEventTopology {
 
         TopologyBuilder builder = new TopologyBuilder();
         configureKafkaSpout(builder);
-        configureEventBolt(builder);
+        configureMonitorBolt(builder);
         configureAlertBolt(builder);
-        configureHDFSBolt(builder);
+        configureHdfsBolt(builder);
         //configureHBaseBolt(builder);
 
         StormSubmitter.submitTopology(topologyConfig.getProperty("storm.topology.name"),
