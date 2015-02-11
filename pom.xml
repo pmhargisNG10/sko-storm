@@ -13,7 +13,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <storm.version>0.9.1.2.1.1.0-385</storm.version>
         <storm.kafka.version>0.9.1.2.1.1.0-385</storm.kafka.version>
-        <hadoop.version>2.4.0.2.1.1.0-385</hadoop.version>
+        <!--
+        hadoop.version WAS set to: 2.4.0.2.1.1.0-385
+        -->
+        <hadoop.version>2.6.0</hadoop.version>
         <hbase.version>0.98.0.2.1.1.0-385-hadoop2</hbase.version>
         <log4j.version>1.2.17</log4j.version>
         <storm.hdfs.version>0.9.1.2.1.2.0-402</storm.hdfs.version>
@@ -69,6 +72,7 @@
             </plugin>
         </plugins>
     </build>
+
     <dependencies>
         <!-- Storm Dependencies -->
         <dependency>
@@ -100,6 +104,16 @@
             <groupId>org.apache.storm</groupId>
             <artifactId>storm-hdfs</artifactId>
             <version>${storm.hdfs.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-client</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-hdfs</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
 
@@ -164,6 +178,16 @@
         </dependency>
 
         <!-- Other Dependency -->
+        <dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.htrace</groupId>
+            <artifactId>htrace-core</artifactId>
+            <version>3.0.4</version>
+        </dependency>
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
