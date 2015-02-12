@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -17,15 +18,15 @@ public class DtsPacket implements Serializable {
 
     public static final String DTS_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
-    private Date Trace;
+    private Long Trace;
     private Double Depth;
     private Double Temp;
 
-    public Date getTrace() {
+    public Long getTrace() {
         return Trace;
     }
 
-    public void setTrace(Date trace) {
+    public void setTrace(Long trace) {
         Trace = trace;
     }
 
@@ -57,11 +58,19 @@ public class DtsPacket implements Serializable {
     }
 
     public static void main(String... args) {
-        String json = "{\"Trace\":\"2013-05-05T14:17:22.000Z\",\"Depth\":1638.77958,\"Temp\":158.4924789313311}";
+        // Original Format:
+        //String json = "{\"Trace\":\"2013-05-05T14:17:22.000Z\",\"Depth\":1638.77958,\"Temp\":158.4924789313311}";
+
+        // New Format:
+        String json = "{\"Trace\":\"1367763442000\",\"Depth\":1638.77958,\"Temp\":158.4924789313311}";
+
         //parse json
         Gson gson = new GsonBuilder().setDateFormat(DTS_DATE_FORMAT).create();
 
         DtsPacket dts = gson.fromJson(json, DtsPacket.class);
+        Date date = new Date(dts.getTrace());
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DTS_DATE_FORMAT);
+        System.out.println("Converting long to Date: "+dateFormat.format(date));
         System.out.println(dts);
     }
 }

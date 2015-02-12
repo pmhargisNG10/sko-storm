@@ -39,9 +39,16 @@ public class DtsMonitorBolt implements IRichBolt
     public void execute(Tuple tuple)
     {
         LOG.info("START SkoStormDemoBolt.execute()");
-        long traceTime = tuple.getLongByField(ESPScheme.TRACE_KEY);
-        double depth = tuple.getDoubleByField(ESPScheme.DEPTH_KEY);
-        double temperature = tuple.getDoubleByField(ESPScheme.TEMP_KEY);
+
+        // Retrieve data as string
+        String traceString = tuple.getStringByField(ESPScheme.TRACE_KEY);
+        String depthString = tuple.getStringByField(ESPScheme.DEPTH_KEY);
+        String tempString = tuple.getStringByField(ESPScheme.TEMP_KEY);
+
+        // Now convert to actual types
+        long traceTime = new Long(traceString).longValue();
+        double depth = new Double(depthString).doubleValue();
+        double temperature = new Double(tempString).doubleValue();
 
         String traceId = new DateTime(new Date(traceTime)).toString();
 //        try {

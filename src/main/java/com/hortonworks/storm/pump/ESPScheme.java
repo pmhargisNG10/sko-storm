@@ -48,17 +48,17 @@ public class ESPScheme implements Scheme {
         try {
             String dtsJson = new String(bytes, "UTF-8");
             //parse json string in
-            DtsPacket dts = GSON.fromJson(dtsJson, DtsPacket.class);
+            DtsPacket dtsPacket = GSON.fromJson(dtsJson, DtsPacket.class);
 
-            if(dts != null) {
-                Date trace = dts.getTrace();
-                long time = 0L;
-                if(trace != null) {
-                    time = trace.getTime();
+            if(dtsPacket != null) {
+                Long traceId = dtsPacket.getTrace();
+                Date timestamp;
+                if(traceId != null) {
+                    timestamp = new Date(traceId);
                 }
-                double depth = dts.getDepth();
-                double temp = dts.getTemp();
-                return new Values(time, depth, temp);
+                Double depth = dtsPacket.getDepth();
+                Double temp = dtsPacket.getTemp();
+                return new Values(traceId.longValue(), depth.doubleValue(), temp.doubleValue());
             } else {
                 LOG.error("JSON string from Kafka topic is empty. " + dtsJson);
                 return null;

@@ -16,7 +16,6 @@ import org.apache.storm.hdfs.bolt.rotation.FileSizeRotationPolicy;
 import org.apache.storm.hdfs.bolt.sync.CountSyncPolicy;
 import org.apache.storm.hdfs.bolt.sync.SyncPolicy;
 import storm.kafka.BrokerHosts;
-import storm.kafka.KafkaSpout;
 import storm.kafka.SpoutConfig;
 import storm.kafka.ZkHosts;
 
@@ -27,11 +26,12 @@ public class ESPEventTopology extends BaseEventTopology {
 
     private static final Logger LOG = Logger.getLogger(ESPEventTopology.class);
 
-    private static final String KAFKA_SPOUT_ID = "kafkaSpout";
+    //private static final String KAFKA_SPOUT_ID = "kafkaSpout";
+    private static final String CSV_SPOUT_ID = "csvSpout";
     private static final String ALERT_BOLT_ID = "dtsAlertBolt";
-    private static final String DTS_BOLT_ID = "dtsMonitorBolt";
+    private static final String MONITOR_BOLT_ID = "dtsMonitorBolt";
     private static final String HDFS_BOLT_ID = "hdfsBolt";
-    private static final String HBASE_BOLT_ID = "hbaseBolt";
+    //private static final String HBASE_BOLT_ID = "hbaseBolt";
 
     public ESPEventTopology(String configFileLocation) throws Exception{
         super(configFileLocation);
@@ -51,16 +51,23 @@ public class ESPEventTopology extends BaseEventTopology {
         return spoutConfig;
     }
 
-    public void configureKafkaSpout(TopologyBuilder builder)
+//    public void configureKafkaSpout(TopologyBuilder builder)
+//    {
+//        KafkaSpout kafkaSpout = new KafkaSpout(constructKafkaSpoutConf());
+//        builder.setSpout(KAFKA_SPOUT_ID, kafkaSpout, 3);
+//    }
+
+    public void configureCsvSpout(TopologyBuilder builder)
     {
-        KafkaSpout kafkaSpout = new KafkaSpout(constructKafkaSpoutConf());
-        builder.setSpout(KAFKA_SPOUT_ID, kafkaSpout, 3);
+        String csvFile = topologyConfig.getProperty("csvspout.filename");
+        CsvSpout csvSpout = new CsvSpout(csvFile, ',', true /*includesHeaderRow*/);
+        builder.setSpout(CSV_SPOUT_ID, csvSpout, 1);
     }
 
     public void configureMonitorBolt(TopologyBuilder builder)
     {
         DtsMonitorBolt dtsMonitorBolt = new DtsMonitorBolt();
-        builder.setBolt(DTS_BOLT_ID, dtsMonitorBolt, 3).fieldsGrouping(KAFKA_SPOUT_ID,
+        builder.setBolt(MONITOR_BOLT_ID, dtsMonitorBolt, 3).fieldsGrouping(CSV_SPOUT_ID,
                 new Fields(ESPScheme.TRACE_KEY));
     }
 
@@ -68,7 +75,7 @@ public class ESPEventTopology extends BaseEventTopology {
     {
         DtsAlertBolt dtsAlertBolt = new DtsAlertBolt();
 //        builder.setBolt(ALERT_BOLT_ID, monitorBolt, 2).shuffleGrouping(KAFKA_SPOUT_ID);
-        builder.setBolt(ALERT_BOLT_ID, dtsAlertBolt, 21).fieldsGrouping(DTS_BOLT_ID,
+        builder.setBolt(ALERT_BOLT_ID, dtsAlertBolt, 21).fieldsGrouping(MONITOR_BOLT_ID,
                 new Fields(ESPScheme.TRACE_KEY));
     }
 
@@ -98,20 +105,20 @@ public class ESPEventTopology extends BaseEventTopology {
 
         // Instantiate the HdfsBolt
         HdfsBolt bolt = new HdfsBolt()
-                .withFsUrl("hdfs://hdppmh1-master-01.cloudapp.net:8020")
+                .withFsUrl("hdfs://sandbox.hortonworks.com:8020")
                 .withFileNameFormat(fileNameFormat)
                 .withRecordFormat(format)
                 .withRotationPolicy(rotationPolicy)
                 .withSyncPolicy(syncPolicy);
 
         // int hdfsBoltCount = Integer.valueOf(topologyConfig.getProperty("hdfsbolt.thread.count"));
-        builder.setBolt(HDFS_BOLT_ID, bolt, 3).shuffleGrouping(KAFKA_SPOUT_ID);
+        builder.setBolt(HDFS_BOLT_ID, bolt, 3).shuffleGrouping(MONITOR_BOLT_ID);
     }
 
 //    public void configureHBaseBolt(TopologyBuilder builder)
 //    {
 //        TagHBaseBolt hbaseBolt = new TagHBaseBolt();
-//        builder.setBolt(HBASE_BOLT_ID, hbaseBolt, 42).fieldsGrouping(DTS_BOLT_ID,
+//        builder.setBolt(HBASE_BOLT_ID, hbaseBolt, 42).fieldsGrouping(MONITOR_BOLT_ID,
 //                new Fields(ESPScheme.TRACE_KEY));
 //    }
 
@@ -127,7 +134,8 @@ public class ESPEventTopology extends BaseEventTopology {
          */
 
         TopologyBuilder builder = new TopologyBuilder();
-        configureKafkaSpout(builder);
+        ////configureKafkaSpout(builder);
+        configureCsvSpout(builder);
         configureMonitorBolt(builder);
         configureAlertBolt(builder);
         configureHdfsBolt(builder);
